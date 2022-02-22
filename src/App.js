@@ -37,15 +37,15 @@ const Task = () => {
                   </Col>
                 </Row>    
 
-                <Row className="mt-3 justify-content-center">
+                <Row className="mt-1 justify-content-center">
                   <Col md={8}>
                     <Form>
                       <Row>
                         <Col md={7}>
-                          <Form.Control placeholder="Enter task name" autoFocus onChange={taskName} value={temp}/>
+                          <Form.Control placeholder="Enter task name" className="mt-2" autoFocus onChange={taskName} value={temp}/>
                         </Col>
                         <Col md={5}>
-                          <Button type="button" variant="primary" className="pl-5 pr-5 btn-block" onClick={addTask}>Add Task</Button>
+                          <Button type="button" variant="primary" className="pl-5 pr-5 btn-block mt-2" onClick={addTask}>Add Task</Button>
                         </Col>
                       </Row>
                     </Form>
