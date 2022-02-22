@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 import { Button, Container, Row, Col, Form} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
 
 
 const Task = () => {
-  const [tasks, setTask] = useState(['satu', 'dua', 'tiga', 'empat', 'lima'])
+  const [tasks, setTask] = useState(['First Task'])
   const [temp, setTemp] = useState('')
 
   useEffect(() => {
