@@ -1,67 +1,91 @@
 import './App.css';
 import { Button, Container, Row, Col, Form} from 'react-bootstrap';
-import {useState, useEffect} from 'react';
+import { MdDelete, MdAddCircle } from "react-icons/md";
+import {useState, useRef, useEffect } from 'react';
 
 
-const Task = () => {
-  const [tasks, setTask] = useState(['First Task'])
+const myTasks = [
+  { id : 1, name : "First Task" },
+] 
+
+const Header = ({count}) => {
+  return <>
+   <h1>My Task Application</h1>
+   <h5>You have {count} tasks to do!</h5>
+  </>
+}
+
+const FormTask = ({setTask, tasks}) => {
   const [temp, setTemp] = useState('')
-
-  useEffect(() => {
-    console.log('useeffect')
-  })
 
   const taskName = event => {
     setTemp(event.target.value)
   }
 
-  const addTask = () => {
-    setTask([...tasks, temp])
-    setTemp('')
+  const inputRef = useRef(null);
 
+  useEffect(() => {
+      inputRef.current.focus();
+  });
+
+  const addTask = () => {
+    const newTask = {
+      id : tasks.length + 1,
+      name : temp
+    }
+    setTask([...tasks, newTask])
+    setTemp('')
   }
 
+  return  <Form>
+            <Row>
+              <Col md={7}>
+                <Form.Control placeholder="Enter task name" className="mt-2" autoFocus onChange={taskName} value={temp}  ref={inputRef}/>
+              </Col>
+              <Col md={5}>
+                <Button type="button" variant="primary" className="pl-5 pr-5 btn-block mt-2" onClick={addTask} disabled={temp === ''}>Add Task <MdAddCircle/></Button>
+              </Col>
+            </Row>
+          </Form>
+}
+
+const ListTask = ({setTask, tasks}) => {
   const deleteTask = (index) => {
     const name = index.target.getAttribute('name')
-    setTask(tasks.filter(item => item !== name))
-  
+      setTask(tasks.filter(item => item.name !== name))
   }
+
+  return tasks.map((task, i) => (
+    <div className="list-groups" key={i}>
+      <div className="list-group-left">{task.name}</div>
+      <div className="list-group-right">
+        <Button type="button" variant="outline-danger" name={task.name} onClick={deleteTask}>Delete<MdDelete/> </Button>
+      </div>
+    </div>
+  ))                   
+}
+
+const TaskApplication = () => {
+  const [tasks, setTask] = useState(myTasks)
 
   return  <Container className="pt-5" >
             <Row className="justify-content-center">
               <Col md={10} className="borderPrimary">
                 <Row>
                   <Col>
-                    <h1>My Task Application</h1>
-                    <h5>You have {tasks.length} tasks to do!</h5>
+                    <Header count={tasks.length}/>
                   </Col>
                 </Row>    
 
                 <Row className="mt-1 justify-content-center">
                   <Col md={8}>
-                    <Form>
-                      <Row>
-                        <Col md={7}>
-                          <Form.Control placeholder="Enter task name" className="mt-2" autoFocus onChange={taskName} value={temp}/>
-                        </Col>
-                        <Col md={5}>
-                          <Button type="button" variant="primary" className="pl-5 pr-5 btn-block mt-2" onClick={addTask}>Add Task</Button>
-                        </Col>
-                      </Row>
-                    </Form>
+                    <FormTask setTask={setTask} tasks={tasks}/>
                   </Col>
                 </Row>
 
                 <Row className="mt-3 mb-5 justify-content-center">
                   <Col md={8} className="text-dark">
-                    {tasks.map((task, i) => (
-                      <div className="list-groups" key={i}>
-                        <div className="list-group-left">{task}</div>
-                        <div className="list-group-right">
-                          <Button type="button" variant="outline-danger" name={task} onClick={deleteTask} >Delete</Button>
-                        </div>
-                      </div>
-                    ))}                    
+                    <ListTask  setTask={setTask} tasks={tasks}/>
                   </Col>
                 </Row>
               </Col>
@@ -75,7 +99,7 @@ const Task = () => {
 function App() {
   return (
     <div className="App App-header">
-      <Task />
+      <TaskApplication />
     </div>
   );
 }
